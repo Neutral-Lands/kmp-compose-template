@@ -352,10 +352,11 @@ Complex screens MUST be broken down into individual Composable functions in sepa
 
 ```
 presentation/feature/example/
-    ├── ExampleScreen.kt          # top-level screen — wires ViewModel + sections
-    ├── ExampleHeaderSection.kt   # header section composable
-    ├── ExampleListSection.kt     # list section composable
-    └── ExampleEmptyState.kt      # empty state composable
+    ├── sections/
+    │   ├── ExampleHeaderSection.kt   # header section composable
+    │   ├── ExampleListSection.kt     # list section composable
+    │   └── ExampleEmptyState.kt      # empty state composable
+    └── ExampleScreen.kt              # top-level screen — wires ViewModel + sections
 ```
 
 Every generated Composable MUST have an accompanying `@Preview` function in the same file.
