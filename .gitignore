@@ -1,0 +1,134 @@
+# =============================================================================
+# Nouri — .gitignore
+# =============================================================================
+
+# =============================================================================
+# Credentials & secrets — NEVER commit these
+# =============================================================================
+local.properties
+iosApp/Config.xcconfig
+.env
+.env.dev
+.env.prod
+.env.local
+google-services.json
+GoogleService-Info.plist
+*.p8
+*.p12
+*.jks
+*.keystore
+
+# =============================================================================
+# Gradle
+# =============================================================================
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# =============================================================================
+# Android
+# =============================================================================
+androidApp/build/
+*.apk
+*.aab
+*.dex
+*.class
+bin/
+gen/
+out/
+release/
+
+# =============================================================================
+# iOS / Xcode
+# =============================================================================
+iosApp/build/
+iosApp/*.xcworkspace/
+iosApp/Pods/
+iosApp/.build/
+*.xcuserstate
+*.xcuserdata/
+xcuserdata/
+DerivedData/
+*.moved-aside
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+timeline.xctimeline
+playground.xcworkspace
+*.hmap
+*.ipa
+
+# =============================================================================
+# Kotlin Multiplatform / Compose
+# =============================================================================
+shared/build/
+kotlin-js-store/
+.kotlin/
+*.kotlin_module
+composeApp/build/
+
+# =============================================================================
+# IntelliJ / Android Studio
+# =============================================================================
+.idea/
+*.iml
+*.ipr
+*.iws
+*.xml
+!.idea/codeStyles/
+!.idea/inspectionProfiles/
+!.idea/runConfigurations/
+*.orig
+out/
+
+# =============================================================================
+# macOS
+# =============================================================================
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# =============================================================================
+# Supabase
+# =============================================================================
+.supabase/
+supabase/.temp/
+supabase/functions/.env
+
+# =============================================================================
+# Node / Web
+# =============================================================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+dist/
+.cache/
+.parcel-cache/
+
+# =============================================================================
+# Logs & temp
+# =============================================================================
+*.log
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# =============================================================================
+# Test & coverage reports
+# =============================================================================
+shared/build/reports/
+**/build/reports/kover/
