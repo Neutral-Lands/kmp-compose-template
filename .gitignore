@@ -82,12 +82,17 @@ composeApp/build/
 *.iml
 *.ipr
 *.iws
-*.xml
+.idea/**/*.xml
 !.idea/codeStyles/
 !.idea/inspectionProfiles/
 !.idea/runConfigurations/
 *.orig
 out/
+
+# =============================================================================
+# Generated output
+# =============================================================================
+graphify-out/
 
 # =============================================================================
 # macOS
