@@ -1,0 +1,47 @@
+config:
+  validation: true
+  warningsAsErrors: false
+
+complexity:
+  active: true
+  LongMethod:
+    threshold: 60
+  TooManyFunctions:
+    thresholdInFiles: 20
+    thresholdInClasses: 15
+
+coroutines:
+  active: true
+
+naming:
+  active: true
+  FunctionNaming:
+    functionPattern: '[a-zA-Z][a-zA-Z0-9]*|`[^`]+`'
+  TopLevelPropertyNaming:
+    constantPattern: '[A-Z][_A-Z0-9]*|[a-z][a-zA-Z0-9]*'
+
+performance:
+  active: true
+
+potential-bugs:
+  active: true
+
+style:
+  active: true
+  MagicNumber:
+    ignoreNumbers:
+      - '-1'
+      - '0'
+      - '1'
+      - '2'
+      - '10'
+      - '100'
+  MaxLineLength:
+    maxLineLength: 120
+  WildcardImport:
+    active: false
+
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: false

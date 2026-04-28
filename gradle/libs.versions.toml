@@ -8,6 +8,8 @@ lifecycle = "2.10.0"
 turbine = "1.2.1"
 decompose = "3.1.0"
 supabase = "3.6.0"
+detekt = "1.23.8"
+ktlint-gradle = "14.2.0"
 koin = "4.2.1"
 ktor = "3.4.3"
 kotlinxSerializationJson = "1.11.0"
@@ -39,3 +41,5 @@ kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref 
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 jetbrains-compose = { id = "org.jetbrains.compose", version.ref = "compose" }
+detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+ktlint = { id = "org.jlleitschuh.gradle.ktlint", version.ref = "ktlint-gradle" }

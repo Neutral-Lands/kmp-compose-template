@@ -4,11 +4,17 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.detekt)
 }
 
-val localProps = Properties().apply {
-    rootProject.file("local.properties").takeIf { it.exists() }?.inputStream()?.use(::load)
-}
+val localProps =
+    Properties().apply {
+        rootProject
+            .file("local.properties")
+            .takeIf { it.exists() }
+            ?.inputStream()
+            ?.use(::load)
+    }
 
 android {
     namespace = "com.nouri.android"
@@ -35,7 +41,7 @@ android {
             isMinifyEnabled = false
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                "proguard-rules.pro",
             )
         }
     }
@@ -51,4 +57,10 @@ dependencies {
     implementation(libs.androidx.activity.compose)
     implementation(libs.koin.core)
     implementation(libs.koin.android)
+}
+
+detekt {
+    config.setFrom(rootProject.file("detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    allRules = false
 }

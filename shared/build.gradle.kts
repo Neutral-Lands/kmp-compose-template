@@ -6,6 +6,7 @@ plugins {
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.detekt)
     kotlin("native.cocoapods")
 }
 
@@ -76,4 +77,16 @@ kotlin {
             implementation(libs.ktor.client.js)
         }
     }
+}
+
+detekt {
+    config.setFrom(rootProject.file("detekt/detekt.yml"))
+    buildUponDefaultConfig = true
+    allRules = false
+    source.setFrom(
+        "src/commonMain/kotlin",
+        "src/androidMain/kotlin",
+        "src/iosMain/kotlin",
+        "src/wasmJsMain/kotlin",
+    )
 }
