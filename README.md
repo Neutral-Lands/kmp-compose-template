@@ -140,28 +140,43 @@ cd nouri
 
 ### 2. Set up credentials
 
-**Android** — create `local.properties` in the project root (never commit this file):
+Credentials are stored in **1Password → Nouri vault**. Ask a team member for access. Never commit credential files.
+
+**Android** — copy the example and fill in values from 1Password:
+
+```bash
+cp local.properties.example local.properties
+# edit local.properties with your values
+```
 
 ```properties
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
+sdk.dir=/Users/yourname/Library/Android/sdk
+SUPABASE_URL=https://zpkhhpkpqfqodezguftf.supabase.co   # prod
+SUPABASE_ANON_KEY=<anon key from 1Password>
 ```
 
-**iOS** — create `iosApp/Config.xcconfig` (never commit this file):
+**iOS** — copy the example and fill in values, then re-run xcodegen:
 
-```
-SUPABASE_URL = your_supabase_project_url
-SUPABASE_ANON_KEY = your_supabase_anon_key
-```
-
-**Web** — create `.env.dev` in the project root (never commit this file):
-
-```
-SUPABASE_URL=your_supabase_project_url
-SUPABASE_ANON_KEY=your_supabase_anon_key
+```bash
+cp iosApp/Configuration/Config.xcconfig.example iosApp/Configuration/Config.xcconfig
+# edit Config.xcconfig with your values
+cd iosApp && xcodegen generate --spec project.yml && cd ..
+./gradlew :shared:podInstall
 ```
 
-> Credentials are stored in 1Password under the **Nouri** vault. Ask a team member for access.
+```
+SUPABASE_URL = https://zpkhhpkpqfqodezguftf.supabase.co
+SUPABASE_ANON_KEY = <anon key from 1Password>
+```
+
+**Web** — pending NEU-84 (env var strategy for Wasm).
+
+**Environments:**
+
+| Environment | Supabase project | URL |
+|---|---|---|
+| prod | `nouri-prod` | `https://zpkhhpkpqfqodezguftf.supabase.co` |
+| dev | `nouri-dev` *(create in Supabase dashboard — separate project for dev/staging)* | — |
 
 ### 3. Link Supabase CLI to production project
 

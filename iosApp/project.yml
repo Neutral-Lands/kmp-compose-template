@@ -13,12 +13,17 @@ targets:
     deploymentTarget: "14.0"
     sources:
       - path: iosApp
+    configFiles:
+      Debug: Configuration/Config.xcconfig
+      Release: Configuration/Config.xcconfig
     info:
       path: iosApp/Info.plist
       properties:
         UILaunchScreen:
           UIColorName: ""
         CADisableMinimumFrameDurationOnPhone: true
+        SUPABASE_URL: $(SUPABASE_URL)
+        SUPABASE_ANON_KEY: $(SUPABASE_ANON_KEY)
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UISupportedInterfaceOrientations~ipad:
