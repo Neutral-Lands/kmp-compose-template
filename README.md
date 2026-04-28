@@ -40,20 +40,34 @@ The patient app is locked until a nutritionist assigns an active plan.
 shared/
 ├── commonMain/
 │   ├── data/
-│   │   ├── datasource/    # Supabase + SQLDelight clients
+│   │   ├── datasource/
+│   │   │   ├── remote/    # Supabase data sources
+│   │   │   └── local/     # SQLDelight data sources
 │   │   ├── repository/    # RepositoryImpl
 │   │   └── model/         # DTOs and local DB models
 │   ├── domain/
-│   │   ├── model/         # Domain models
-│   │   ├── repository/    # Repository interfaces
-│   │   └── usecase/       # Business logic
+│   │   ├── model/         # Pure Kotlin domain models
+│   │   ├── repository/    # Repository interfaces (no framework deps)
+│   │   └── usecase/       # One class per use case
 │   └── presentation/
-│       └── viewmodel/     # MVI ViewModels
-├── mobileMain/            # Shared mobile-only code
+│       ├── base/          # MVI base contracts (State, Intent, Action, Effect) + BaseViewModel
+│       └── shared/        # NouriTheme, shared Composables, design tokens
+├── mobileMain/            # Shared Android + iOS code (excludes Web)
 ├── androidMain/           # Android platform implementations
 ├── iosMain/               # iOS platform implementations
 └── wasmJsMain/            # Web (WASM) platform implementations
 ```
+
+**Dependency rules — never break these:**
+
+| Layer | Rule |
+|---|---|
+| `domain` | Zero platform or framework imports. Pure Kotlin only. |
+| `presentation` | Depends on `domain` only. Never imports from `data`. |
+| `data` | Implements `domain` interfaces. |
+| Platform modules | Depend on `commonMain` only. |
+
+Enforcement: Detekt (NEU-21) and architecture tests (NEU-82). See [ARCHITECTURE.md](ARCHITECTURE.md) for full conventions.
 
 ### MVI flow
 

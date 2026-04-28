@@ -43,12 +43,6 @@ kotlin {
     }
 
     sourceSets {
-        val mobileMain by creating {
-            dependsOn(commonMain.get())
-        }
-        androidMain.get().dependsOn(mobileMain)
-        iosMain.get().dependsOn(mobileMain)
-
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)

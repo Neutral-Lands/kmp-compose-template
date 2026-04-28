@@ -1,4 +1,4 @@
-package com.nouri
+package com.nouri.presentation.shared
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface

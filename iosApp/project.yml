@@ -16,7 +16,9 @@ targets:
     info:
       path: iosApp/Info.plist
       properties:
-        UILaunchStoryboardName: LaunchScreen
+        UILaunchScreen:
+          UIColorName: ""
+        CADisableMinimumFrameDurationOnPhone: true
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UISupportedInterfaceOrientations~ipad:
