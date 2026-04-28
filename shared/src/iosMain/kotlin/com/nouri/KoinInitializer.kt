@@ -1,8 +1,8 @@
 package com.nouri
 
-import com.nouri.data.di.dataModule
+import com.nouri.di.appModule
 import org.koin.core.context.startKoin
 
 fun initKoin(supabaseUrl: String, supabaseAnonKey: String) {
-    startKoin { modules(dataModule(supabaseUrl, supabaseAnonKey)) }
+    startKoin { modules(appModule(supabaseUrl, supabaseAnonKey)) }
 }

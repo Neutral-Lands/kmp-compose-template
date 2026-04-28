@@ -7,6 +7,8 @@ import kotlinx.browser.document
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
+    // NEU-84: replace empty strings with env var injection for Web
+    initKoin(supabaseUrl = "", supabaseAnonKey = "")
     ComposeViewport(document.body!!) {
         App()
     }

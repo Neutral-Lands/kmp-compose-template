@@ -3,7 +3,7 @@ package com.nouri.android
 import android.app.Application
 import android.util.Log
 import com.nouri.data.datasource.remote.SubscriptionPlanDataSource
-import com.nouri.data.di.dataModule
+import com.nouri.di.appModule
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class NouriApplication : Application() {
         super.onCreate()
         startKoin {
             androidContext(this@NouriApplication)
-            modules(dataModule(BuildConfig.SUPABASE_URL, BuildConfig.SUPABASE_ANON_KEY))
+            modules(appModule(BuildConfig.SUPABASE_URL, BuildConfig.SUPABASE_ANON_KEY))
         }
         verifySupabaseConnection()
     }
