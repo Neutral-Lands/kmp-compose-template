@@ -7,10 +7,14 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.sqldelight)
     kotlin("native.cocoapods")
 }
 
 kotlin {
+    compilerOptions {
+        freeCompilerArgs.add("-Xexpect-actual-classes")
+    }
     android {
         namespace = "com.nouri.shared"
         compileSdk = 36
@@ -59,6 +63,8 @@ kotlin {
             implementation(libs.supabase.postgrest)
             implementation(libs.supabase.storage)
             implementation(libs.supabase.realtime)
+            implementation(libs.sqldelight.runtime)
+            implementation(libs.sqldelight.coroutines)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -69,9 +75,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(libs.sqldelight.driver.android)
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
+            implementation(libs.sqldelight.driver.native)
         }
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
@@ -89,4 +97,26 @@ detekt {
         "src/iosMain/kotlin",
         "src/wasmJsMain/kotlin",
     )
+}
+
+sqldelight {
+    databases {
+        create("NouriDatabase") {
+            packageName.set("com.nouri.data.local")
+            schemaOutputDirectory.set(file("src/commonMain/sqldelight/schema"))
+            verifyMigrations.set(true)
+        }
+    }
+}
+
+// Disable ktlint source-set tasks that scan Gradle-generated code (Compose, SQLDelight).
+// They cannot be filtered via KtlintExtension because the plugin bypasses the filter
+// for per-source-set tasks. Hand-written sources are covered by ktlintKotlinScriptCheck
+// and the androidApp module's ktlint tasks.
+afterEvaluate {
+    tasks.matching { task ->
+        task.name.startsWith("runKtlintCheck") ||
+            task.name.startsWith("runKtlintFormat") ||
+            (task.name.startsWith("ktlint") && task.name.contains("SourceSet"))
+    }.configureEach { enabled = false }
 }

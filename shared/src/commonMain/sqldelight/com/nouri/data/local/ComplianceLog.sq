@@ -1,0 +1,32 @@
+CREATE TABLE ComplianceLog (
+    id                TEXT NOT NULL PRIMARY KEY,
+    patient_id        TEXT NOT NULL,
+    meal_plan_slot_id TEXT NOT NULL,
+    log_date          TEXT NOT NULL,
+    status            TEXT NOT NULL,
+    note              TEXT,
+    is_synced         INTEGER NOT NULL DEFAULT 0,
+    created_at        TEXT NOT NULL,
+    updated_at        TEXT NOT NULL
+);
+
+CREATE INDEX idx_compliance_patient_date ON ComplianceLog(patient_id, log_date);
+CREATE INDEX idx_compliance_slot ON ComplianceLog(meal_plan_slot_id);
+
+insertLog:
+INSERT INTO ComplianceLog(id, patient_id, meal_plan_slot_id, log_date, status, note, is_synced, created_at, updated_at)
+VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?);
+
+selectByPatientAndDate:
+SELECT * FROM ComplianceLog
+WHERE patient_id = ? AND log_date = ?
+ORDER BY meal_plan_slot_id;
+
+selectUnsynced:
+SELECT * FROM ComplianceLog WHERE is_synced = 0;
+
+markAsSynced:
+UPDATE ComplianceLog SET is_synced = 1, updated_at = ? WHERE id = ?;
+
+deleteById:
+DELETE FROM ComplianceLog WHERE id = ?;
