@@ -95,6 +95,7 @@ out/
 iosApp/Configuration/Config.xcconfig
 .env
 .env.*
+!.env.example
 
 # =============================================================================
 # Generated output

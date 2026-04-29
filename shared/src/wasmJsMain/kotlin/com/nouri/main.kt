@@ -9,8 +9,7 @@ import org.koin.mp.KoinPlatform
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    // NEU-84: replace empty strings with env var injection for Web
-    initKoin(supabaseUrl = "", supabaseAnonKey = "")
+    initKoin(supabaseUrl = getSupabaseUrl(), supabaseAnonKey = getSupabaseAnonKey())
     val connectivityObserver = KoinPlatform.getKoin().get<ConnectivityObserver>()
     ComposeViewport(document.body!!) {
         App(connectivityObserver = connectivityObserver)

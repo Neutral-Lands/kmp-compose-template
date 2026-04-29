@@ -171,7 +171,13 @@ SUPABASE_URL = https://zpkhhpkpqfqodezguftf.supabase.co
 SUPABASE_ANON_KEY = <anon key from 1Password>
 ```
 
-**Web** — pending NEU-84 (env var strategy for Wasm).
+**Web** — copy `.env.example` to `.env.local`, fill in values, then source before running:
+
+```bash
+cp .env.example .env.local
+# edit .env.local with values from 1Password → Nouri vault
+source .env.local && ./gradlew :shared:wasmJsBrowserDevelopmentRun
+```
 
 **Environments:**
 
