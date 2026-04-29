@@ -1,5 +1,7 @@
 # Nouri — Diet Companion
 
+[![CI](https://github.com/Neutral-Lands/Nouri/actions/workflows/ci.yml/badge.svg)](https://github.com/Neutral-Lands/Nouri/actions/workflows/ci.yml)
+
 A cross-platform nutrition tracking app connecting nutritionists with their clients.
 
 Built with Kotlin Multiplatform (KMP) + Compose Multiplatform, targeting Android, iOS, and Web.
@@ -366,17 +368,20 @@ Preview branches are automatically created by the Supabase GitHub integration an
 
 ## CI Pipeline
 
-CI runs on every PR and push to `main`. Steps:
+CI runs on every PR and push to `main` via GitHub Actions (`.github/workflows/ci.yml`).
 
-1. `ktlintCheck`
-2. `detektAll`
-3. Unit tests
-4. Android build
-5. iOS build
-6. Web (WASM) build
-7. `supabase db lint`
+| Job | What runs |
+|---|---|
+| **Lint** | `./gradlew ktlintCheck detektAll` |
+| **Test** | `./gradlew :shared:jvmTest koverHtmlReport` — uploads coverage as artifact |
 
-A failed step blocks merge.
+Both jobs must pass before merge. Android, iOS, and Web builds are verified locally.
+
+### Branch protection (GitHub Settings → Branches → `main`)
+
+- Required status checks: `Lint`, `Unit Tests + Coverage`
+- Require branches to be up to date before merging
+- No direct commits to `main`
 
 ---
 
