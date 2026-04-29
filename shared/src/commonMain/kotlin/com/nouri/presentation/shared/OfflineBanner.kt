@@ -54,7 +54,7 @@ fun OfflineBanner(isOnline: Boolean) {
 @Preview
 @Composable
 fun OfflineBannerPreview() {
-    MaterialTheme {
+    NouriTheme {
         OfflineBanner(isOnline = false)
     }
 }

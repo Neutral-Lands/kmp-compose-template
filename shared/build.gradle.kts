@@ -1,3 +1,5 @@
+import kotlinx.kover.gradle.plugin.dsl.AggregationType
+import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 
 plugins {
@@ -106,6 +108,35 @@ detekt {
         "src/iosMain/kotlin",
         "src/wasmJsMain/kotlin",
     )
+}
+
+// Kover: exclude packages with no unit-test path and enforce 70% line coverage.
+// Coverage verify runs via :shared:koverVerify (also called by CI).
+// Excluded:
+//   presentation.shared  — Composable UI, verified manually on device/simulator
+//   data.connectivity    — platform stubs (Android/iOS/Wasm), not in jvmTest classpath
+//   generated.resources  — SQLDelight / Compose codegen
+kover {
+    reports {
+        filters {
+            excludes {
+                classes(
+                    "com.nouri.presentation.shared.*",
+                    "com.nouri.data.connectivity.*",
+                    "nouri.shared.generated.resources.*",
+                )
+            }
+        }
+        verify {
+            rule {
+                bound {
+                    minValue = 70
+                    coverageUnits = CoverageUnit.LINE
+                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
+                }
+            }
+        }
+    }
 }
 
 sqldelight {

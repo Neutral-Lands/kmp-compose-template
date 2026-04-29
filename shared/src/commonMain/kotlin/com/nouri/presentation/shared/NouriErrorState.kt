@@ -63,7 +63,7 @@ private fun DomainError.toUserMessage(): String = when (this) {
 @Preview
 @Composable
 fun NouriErrorStatePreview() {
-    MaterialTheme {
+    NouriTheme {
         NouriErrorState(
             error = DomainError.NetworkError(),
             onRetry = {},

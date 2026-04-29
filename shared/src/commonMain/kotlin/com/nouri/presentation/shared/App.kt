@@ -2,7 +2,6 @@ package com.nouri.presentation.shared
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -18,7 +17,7 @@ fun App(connectivityObserver: ConnectivityObserver) {
     val snackbarHostState = remember { SnackbarHostState() }
     val isOnline by connectivityObserver.isOnline.collectAsState()
 
-    MaterialTheme {
+    NouriTheme {
         Scaffold(
             snackbarHost = { NouriSnackbarHost(snackbarHostState) },
         ) { padding ->

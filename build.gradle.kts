@@ -25,45 +25,32 @@ subprojects {
 
 // Aggregate coverage from all modules into a single root report.
 // shared:jvmTest must run first to populate coverage data (JVM target added in shared).
-// Usage: ./gradlew :shared:jvmTest koverHtmlReport
+// Usage: ./gradlew :shared:jvmTest koverHtmlReport koverXmlReport
 dependencies {
     kover(project(":shared"))
 }
 
-// Packages excluded from all coverage metrics:
-//   presentation.shared  — Composable UI, no unit-test path (verified manually)
-//   data.connectivity    — platform stubs (Android/iOS/Wasm), not compiled by jvmTest
+// Class-name patterns excluded from all reports (dot notation, * = any chars).
+// These packages have no unit-test path and would skew the threshold:
+//   presentation.shared  — Composable UI, manually tested on device/simulator
+//   data.connectivity    — platform stubs (Android/iOS/Wasm), not in jvmTest classpath
 //   generated.resources  — SQLDelight / Compose codegen
-val koverExcludedPackages = listOf(
-    "com.nouri.presentation.shared",
-    "com.nouri.data.connectivity",
-    "nouri.shared.generated.resources",
+val koverExcludedClasses = listOf(
+    "com.nouri.presentation.shared.*",
+    "com.nouri.data.connectivity.*",
+    "nouri.shared.generated.resources.*",
 )
 
 kover {
     reports {
-        filters {
-            excludes {
-                packages(*koverExcludedPackages.toTypedArray())
-            }
-        }
-        verify {
-            // Thresholds enforced in CI (NEU-18) — not called on local build
-            rule {
-                bound {
-                    minValue = 70
-                    coverageUnits = CoverageUnit.LINE
-                    aggregationForGroup = AggregationType.COVERED_PERCENTAGE
-                }
-            }
-        }
         total {
-            // Single merged HTML report: ./gradlew :shared:jvmTest koverHtmlReport
-            // Output: build/reports/kover/html/index.html
+            // HTML report: ./gradlew :shared:jvmTest koverHtmlReport → build/reports/kover/html/index.html
             html { onCheck = false }
+            // XML report parsed by CI Python script — apply same exclusions so the
+            // reported percentage reflects testable code only.
             filters {
                 excludes {
-                    packages(*koverExcludedPackages.toTypedArray())
+                    classes(*koverExcludedClasses.toTypedArray())
                 }
             }
         }

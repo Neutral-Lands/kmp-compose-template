@@ -22,7 +22,7 @@ fun NouriSnackbarHost(hostState: SnackbarHostState) {
 @Preview
 @Composable
 fun NouriSnackbarHostPreview() {
-    MaterialTheme {
+    NouriTheme {
         NouriSnackbarHost(hostState = SnackbarHostState())
     }
 }

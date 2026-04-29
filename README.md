@@ -329,7 +329,7 @@ Report at `build/reports/kover/html/index.html`.
 | `com.nouri.presentation` | 70% line coverage |
 
 ```bash
-./gradlew koverVerify   # fails if below thresholds
+./gradlew :shared:koverVerify   # fails if below thresholds
 ```
 
 > **MockK note:** `io.mockk:mockk` supports JVM, Android, and Kotlin/Native only — not Wasm. Use hand-written fakes in `commonTest`. MockK is available for JVM-specific test source sets once CI (NEU-18) configures platform runners.
@@ -382,6 +382,94 @@ Both jobs must pass before merge. Android, iOS, and Web builds are verified loca
 - Required status checks: `Lint`, `Unit Tests + Coverage`
 - Require branches to be up to date before merging
 - No direct commits to `main`
+
+---
+
+## iOS Swift/Kotlin Bridge
+
+This section explains how the Kotlin Multiplatform shared module integrates with the Swift iOS host.
+
+### Architecture overview
+
+```
+iOSApp.swift          ← SwiftUI @main entry point, bootstraps Koin
+    └── ContentView.swift     ← SwiftUI View, hosts the Compose layer
+            └── ComposeView   ← UIViewControllerRepresentable wrapper
+                    └── MainViewController.kt  ← exposes Compose UI to Swift
+                            └── App()          ← shared Composable tree
+```
+
+### `MainViewController.kt` — Kotlin side
+
+`shared/src/iosMain/kotlin/com/nouri/MainViewController.kt` calls `ComposeUIViewController { }` to create a standard `UIViewController` that hosts the Compose Multiplatform tree:
+
+```kotlin
+fun MainViewController() = ComposeUIViewController {
+    val connectivityObserver = KoinPlatform.getKoin().get<ConnectivityObserver>()
+    App(connectivityObserver = connectivityObserver)
+}
+```
+
+The Kotlin Gradle plugin exposes this function to Swift as `MainViewControllerKt.MainViewController()` (via the `shared` CocoaPods framework compiled by `./gradlew :shared:podInstall`).
+
+### `ContentView.swift` — Swift side
+
+`iosApp/iosApp/ContentView.swift` wraps the Kotlin `UIViewController` using `UIViewControllerRepresentable`:
+
+```swift
+struct ComposeView: UIViewControllerRepresentable {
+    func makeUIViewController(context: Context) -> UIViewController {
+        MainViewControllerKt.MainViewController()
+    }
+    func updateUIViewController(_ uiViewController: UIViewController, context: Context) {}
+}
+
+struct ContentView: View {
+    var body: some View {
+        ComposeView().ignoresSafeArea(.all)
+    }
+}
+```
+
+`.ignoresSafeArea(.all)` lets the Compose `Scaffold` manage insets itself.
+
+### `iOSApp.swift` — Koin bootstrap
+
+`iosApp/iosApp/iOSApp.swift` is the SwiftUI `@main` entry point. It reads credentials from `Bundle.main` and calls `initKoin` before the first frame renders:
+
+```swift
+@main
+struct iOSApp: App {
+    init() {
+        let url = Bundle.main.infoDictionary?["SUPABASE_URL"] as? String ?? ""
+        let key = Bundle.main.infoDictionary?["SUPABASE_ANON_KEY"] as? String ?? ""
+        KoinInitializerKt.initKoin(supabaseUrl: url, supabaseAnonKey: key)
+    }
+    var body: some Scene {
+        WindowGroup { ContentView() }
+    }
+}
+```
+
+### Credentials flow
+
+```
+Config.xcconfig          (gitignored — copied from Config.xcconfig.example)
+    │  SUPABASE_URL = https://...
+    │  SUPABASE_ANON_KEY = <key>
+    ▼
+Info.plist               (reads from xcconfig via $(SUPABASE_URL) variable expansion)
+    ▼
+Bundle.main.infoDictionary   (read at runtime in iOSApp.swift init)
+    ▼
+KoinInitializerKt.initKoin(supabaseUrl:supabaseAnonKey:)
+```
+
+Never commit `Config.xcconfig` — credentials live in **1Password → Nouri vault**.
+
+### Dark mode
+
+`NouriTheme` uses `isSystemInDarkTheme()` (Compose Multiplatform), which on iOS reads `UIUserInterfaceStyle` automatically. No additional Swift-side setup is required — toggling Appearance in iOS Settings → Developer triggers the correct color scheme.
 
 ---
 
