@@ -40,10 +40,16 @@ class CounterViewModelTest {
     fun `given count is above zero when reset then count is zero`() =
         runTest {
             val viewModel = CounterViewModel()
-            repeat(3) { viewModel.handleIntent(CounterIntent.Increment) }
-            viewModel.handleIntent(CounterIntent.Reset)
             viewModel.uiState.test {
-                assertEquals(0, awaitItem().count)
+                awaitItem() // initial: 0
+                viewModel.handleIntent(CounterIntent.Increment)
+                awaitItem() // 1
+                viewModel.handleIntent(CounterIntent.Increment)
+                awaitItem() // 2
+                viewModel.handleIntent(CounterIntent.Increment)
+                awaitItem() // 3
+                viewModel.handleIntent(CounterIntent.Reset)
+                assertEquals(0, awaitItem().count) // after reset: 0
                 cancelAndIgnoreRemainingEvents()
             }
         }

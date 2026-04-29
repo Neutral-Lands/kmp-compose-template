@@ -30,8 +30,23 @@ dependencies {
     kover(project(":shared"))
 }
 
+// Packages excluded from all coverage metrics:
+//   presentation.shared  — Composable UI, no unit-test path (verified manually)
+//   data.connectivity    — platform stubs (Android/iOS/Wasm), not compiled by jvmTest
+//   generated.resources  — SQLDelight / Compose codegen
+val koverExcludedPackages = listOf(
+    "com.nouri.presentation.shared",
+    "com.nouri.data.connectivity",
+    "nouri.shared.generated.resources",
+)
+
 kover {
     reports {
+        filters {
+            excludes {
+                packages(*koverExcludedPackages.toTypedArray())
+            }
+        }
         verify {
             // Thresholds enforced in CI (NEU-18) — not called on local build
             rule {
@@ -46,6 +61,11 @@ kover {
             // Single merged HTML report: ./gradlew :shared:jvmTest koverHtmlReport
             // Output: build/reports/kover/html/index.html
             html { onCheck = false }
+            filters {
+                excludes {
+                    packages(*koverExcludedPackages.toTypedArray())
+                }
+            }
         }
     }
 }
