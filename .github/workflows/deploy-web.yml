@@ -42,13 +42,16 @@ jobs:
           curl -sSL https://github.com/supabase/cli/releases/latest/download/supabase_linux_amd64.tar.gz \
             | tar -xz -C /usr/local/bin supabase
 
+      - name: Link Supabase project
+        env:
+          SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+        run: supabase link --project-ref zpkhhpkpqfqodezguftf
+
       - name: Upload to Supabase Storage
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: |
-          supabase storage cp \
-            --project-ref zpkhhpkpqfqodezguftf \
-            --recursive \
+          supabase storage cp -r \
             shared/build/dist/wasmJs/productionExecutable/ \
             ss://nouri-web/
 
