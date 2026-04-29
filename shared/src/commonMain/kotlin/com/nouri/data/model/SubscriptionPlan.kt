@@ -9,5 +9,5 @@ data class SubscriptionPlan(
     val name: String,
     @SerialName("max_patients") val maxPatients: Int?,
     @SerialName("price_usd_cents") val priceUsdCents: Int,
-    @SerialName("created_at") val createdAt: String? = null
+    @SerialName("created_at") val createdAt: String? = null,
 )

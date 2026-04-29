@@ -5,7 +5,6 @@ import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 class AnthropometricCalculatorUseCaseTest {
-
     private val useCase = AnthropometricCalculatorUseCase()
 
     // region BMI calculation

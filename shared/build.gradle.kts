@@ -149,14 +149,27 @@ sqldelight {
     }
 }
 
-// Disable ktlint source-set tasks that scan Gradle-generated code (Compose, SQLDelight).
-// They cannot be filtered via KtlintExtension because the plugin bypasses the filter
-// for per-source-set tasks. Hand-written sources are covered by ktlintKotlinScriptCheck
-// and the androidApp module's ktlint tasks.
+// Fix: ktlint per-source-set KMP tasks include generated files (Compose resources,
+// SQLDelight) because KtlintExtension.filter{} does not propagate to those tasks.
+//
+// The Kotlin DSL resolves `source` as FileTree (via a SourceTask DSL extension),
+// hiding the backing ConfigurableFileCollection and its setFrom() method. We access
+// the ConfigurableFileCollection via Java reflection and replace it with an explicit
+// fileTree("src") so only hand-written code is linted. All generated files live under
+// the project build directory; src/ contains only hand-written source sets.
 afterEvaluate {
-    tasks.matching { task ->
-        task.name.startsWith("runKtlintCheck") ||
-            task.name.startsWith("runKtlintFormat") ||
-            (task.name.startsWith("ktlint") && task.name.contains("SourceSet"))
-    }.configureEach { enabled = false }
+    val handWrittenSources = fileTree("src") { include("**/*.kt", "**/*.kts") }
+    fun patchKtlintSource(task: Task) {
+        val src = runCatching {
+            task.javaClass.getMethod("getSource").invoke(task)
+                as? org.gradle.api.file.ConfigurableFileCollection
+        }.getOrNull() ?: return
+        src.setFrom(handWrittenSources)
+    }
+    tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>().configureEach {
+        patchKtlintSource(this)
+    }
+    tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintFormatTask>().configureEach {
+        patchKtlintSource(this)
+    }
 }

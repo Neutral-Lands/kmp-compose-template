@@ -7,7 +7,6 @@ import kotlin.test.assertNull
 import kotlin.test.assertSame
 
 class DomainErrorTest {
-
     @Test
     fun `given throwable when from then returns UnknownError with cause`() {
         val cause = RuntimeException("boom")

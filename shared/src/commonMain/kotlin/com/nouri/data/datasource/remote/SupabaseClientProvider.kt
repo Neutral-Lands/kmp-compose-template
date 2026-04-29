@@ -6,9 +6,12 @@ import io.github.jan.supabase.postgrest.Postgrest
 import io.github.jan.supabase.realtime.Realtime
 import io.github.jan.supabase.storage.Storage
 
-fun provideSupabaseClient(url: String, anonKey: String) = createSupabaseClient(
+fun provideSupabaseClient(
+    url: String,
+    anonKey: String,
+) = createSupabaseClient(
     supabaseUrl = url,
-    supabaseKey = anonKey
+    supabaseKey = anonKey,
 ) {
     install(Auth) {
         autoLoadFromStorage = false

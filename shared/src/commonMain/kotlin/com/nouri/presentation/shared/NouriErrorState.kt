@@ -27,9 +27,10 @@ fun NouriErrorState(
     onRetry: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(32.dp),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(32.dp),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -53,12 +54,13 @@ fun NouriErrorState(
     }
 }
 
-private fun DomainError.toUserMessage(): String = when (this) {
-    is DomainError.NetworkError -> "No internet connection. Check your network and try again."
-    is DomainError.AuthError -> "Your session has expired. Please sign in again."
-    is DomainError.NotFoundError -> "The requested resource was not found."
-    is DomainError.UnknownError -> "Something went wrong. Please try again."
-}
+private fun DomainError.toUserMessage(): String =
+    when (this) {
+        is DomainError.NetworkError -> "No internet connection. Check your network and try again."
+        is DomainError.AuthError -> "Your session has expired. Please sign in again."
+        is DomainError.NotFoundError -> "The requested resource was not found."
+        is DomainError.UnknownError -> "Something went wrong. Please try again."
+    }
 
 @Preview
 @Composable

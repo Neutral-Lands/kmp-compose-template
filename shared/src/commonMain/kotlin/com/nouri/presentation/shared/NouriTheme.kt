@@ -36,43 +36,45 @@ private val ColorNouriErrorDarkContainer = Color(0xFF93000A)
 
 // ── Schemes ───────────────────────────────────────────────────────────────────
 
-private val LightColorScheme = lightColorScheme(
-    primary = ColorNouriGreen,
-    onPrimary = Color.White,
-    primaryContainer = ColorNouriGreenContainer,
-    onPrimaryContainer = ColorNouriGreenDark,
-    secondary = ColorNouriSecondary,
-    onSecondary = Color.White,
-    secondaryContainer = ColorNouriSecondaryContainer,
-    onSecondaryContainer = ColorNouriSecondaryDark,
-    background = ColorNouriBackground,
-    onBackground = ColorNouriOnBackground,
-    surface = ColorNouriBackground,
-    onSurface = ColorNouriOnBackground,
-    error = ColorNouriError,
-    onError = Color.White,
-    errorContainer = ColorNouriErrorContainer,
-    onErrorContainer = ColorNouriOnError,
-)
+private val LightColorScheme =
+    lightColorScheme(
+        primary = ColorNouriGreen,
+        onPrimary = Color.White,
+        primaryContainer = ColorNouriGreenContainer,
+        onPrimaryContainer = ColorNouriGreenDark,
+        secondary = ColorNouriSecondary,
+        onSecondary = Color.White,
+        secondaryContainer = ColorNouriSecondaryContainer,
+        onSecondaryContainer = ColorNouriSecondaryDark,
+        background = ColorNouriBackground,
+        onBackground = ColorNouriOnBackground,
+        surface = ColorNouriBackground,
+        onSurface = ColorNouriOnBackground,
+        error = ColorNouriError,
+        onError = Color.White,
+        errorContainer = ColorNouriErrorContainer,
+        onErrorContainer = ColorNouriOnError,
+    )
 
-private val DarkColorScheme = darkColorScheme(
-    primary = ColorNouriGreenLight,
-    onPrimary = ColorNouriGreenDark,
-    primaryContainer = ColorNouriGreenDim,
-    onPrimaryContainer = ColorNouriGreenContainer,
-    secondary = ColorNouriSecondaryLight,
-    onSecondary = ColorNouriSecondaryDim,
-    secondaryContainer = ColorNouriSecondaryDimContainer,
-    onSecondaryContainer = ColorNouriSecondaryContainer,
-    background = ColorNouriBackgroundDark,
-    onBackground = ColorNouriOnBackgroundDark,
-    surface = ColorNouriBackgroundDark,
-    onSurface = ColorNouriOnBackgroundDark,
-    error = ColorNouriErrorDark,
-    onError = ColorNouriErrorDarkOn,
-    errorContainer = ColorNouriErrorDarkContainer,
-    onErrorContainer = ColorNouriErrorContainer,
-)
+private val DarkColorScheme =
+    darkColorScheme(
+        primary = ColorNouriGreenLight,
+        onPrimary = ColorNouriGreenDark,
+        primaryContainer = ColorNouriGreenDim,
+        onPrimaryContainer = ColorNouriGreenContainer,
+        secondary = ColorNouriSecondaryLight,
+        onSecondary = ColorNouriSecondaryDim,
+        secondaryContainer = ColorNouriSecondaryDimContainer,
+        onSecondaryContainer = ColorNouriSecondaryContainer,
+        background = ColorNouriBackgroundDark,
+        onBackground = ColorNouriOnBackgroundDark,
+        surface = ColorNouriBackgroundDark,
+        onSurface = ColorNouriOnBackgroundDark,
+        error = ColorNouriErrorDark,
+        onError = ColorNouriErrorDarkOn,
+        errorContainer = ColorNouriErrorDarkContainer,
+        onErrorContainer = ColorNouriErrorContainer,
+    )
 
 // ── Theme entry point ─────────────────────────────────────────────────────────
 
@@ -92,8 +94,10 @@ fun NouriTheme(
 
 object NouriTheme {
     val colors: ColorScheme
-        @Composable @ReadOnlyComposable get() = MaterialTheme.colorScheme
+        @Composable @ReadOnlyComposable
+        get() = MaterialTheme.colorScheme
 
     val typography: Typography
-        @Composable @ReadOnlyComposable get() = MaterialTheme.typography
+        @Composable @ReadOnlyComposable
+        get() = MaterialTheme.typography
 }
