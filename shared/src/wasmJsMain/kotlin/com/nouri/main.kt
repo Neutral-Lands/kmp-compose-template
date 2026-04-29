@@ -3,7 +3,7 @@ package com.nouri
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import com.nouri.domain.model.ConnectivityObserver
-import com.nouri.presentation.shared.App
+import com.nouri.presentation.web.WebApp
 import kotlinx.browser.document
 import org.koin.mp.KoinPlatform
 
@@ -12,6 +12,6 @@ fun main() {
     initKoin(supabaseUrl = getSupabaseUrl(), supabaseAnonKey = getSupabaseAnonKey())
     val connectivityObserver = KoinPlatform.getKoin().get<ConnectivityObserver>()
     ComposeViewport(document.body!!) {
-        App(connectivityObserver = connectivityObserver)
+        WebApp(connectivityObserver = connectivityObserver)
     }
 }
