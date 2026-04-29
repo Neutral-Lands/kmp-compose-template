@@ -518,6 +518,52 @@ supabase secrets set FCM_SERVER_KEY=your_fcm_server_key
 
 ---
 
+## Web Hosting (Supabase Storage)
+
+The Wasm build is deployed to a public Supabase Storage bucket (`nouri-web`) on every push to `main`. HTTPS is enforced by Supabase's CDN.
+
+### Deployment URL
+
+```
+https://zpkhhpkpqfqodezguftf.supabase.co/storage/v1/object/public/nouri-web/index.html
+```
+
+### One-time bucket setup (Supabase dashboard)
+
+1. Open [Supabase dashboard → Storage](https://supabase.com/dashboard/project/zpkhhpkpqfqodezguftf/storage/buckets)
+2. Create a new bucket named **`nouri-web`** — tick **Public bucket** and enable **CDN**
+3. No additional RLS policies needed for a public read bucket
+
+### CI secrets required
+
+Add to **GitHub → Settings → Secrets → Actions**:
+
+| Secret | Value |
+|---|---|
+| `SUPABASE_ACCESS_TOKEN` | Personal access token from [supabase.com/account/tokens](https://supabase.com/account/tokens) |
+| `SUPABASE_URL` | `https://zpkhhpkpqfqodezguftf.supabase.co` |
+| `SUPABASE_ANON_KEY` | Anon key from 1Password → Nouri vault |
+
+### Manual deploy
+
+```bash
+# Build
+source .env.local && ./gradlew :shared:wasmJsBrowserDistribution
+
+# Upload (requires SUPABASE_ACCESS_TOKEN in env)
+supabase storage cp \
+  --project-ref zpkhhpkpqfqodezguftf \
+  --recursive \
+  shared/build/dist/wasmJs/productionExecutable/ \
+  ss://nouri-web/
+```
+
+### SPA routing note
+
+Navigation is currently state-based (no URL routing), so refreshing the browser always loads `index.html` → Dashboard with no 404. URL-based deep linking will require a Supabase Edge Function proxy when added.
+
+---
+
 ## Key Docs
 
 | Document | Purpose |
@@ -534,5 +580,6 @@ supabase secrets set FCM_SERVER_KEY=your_fcm_server_key
 |---|---|
 | Linear — Diet Companion project | https://linear.app/neutral-lands |
 | Supabase dashboard — nouri-prod | https://supabase.com/dashboard/project/zpkhhpkpqfqodezguftf |
+| Web app (prod) | https://zpkhhpkpqfqodezguftf.supabase.co/storage/v1/object/public/nouri-web/index.html |
 | Firebase Console | https://console.firebase.google.com |
 | 1Password — Nouri vault | Ask a team member for access |
