@@ -2,6 +2,7 @@ package com.nouri.android
 
 import android.app.Application
 import android.util.Log
+import com.nouri.data.connectivity.AndroidConnectivityObserver
 import com.nouri.data.datasource.remote.SubscriptionPlanDataSource
 import com.nouri.data.local.DatabaseDriverFactory
 import com.nouri.di.appModule
@@ -22,6 +23,7 @@ class NouriApplication : Application() {
                     supabaseUrl = BuildConfig.SUPABASE_URL,
                     supabaseAnonKey = BuildConfig.SUPABASE_ANON_KEY,
                     driverFactory = DatabaseDriverFactory(this@NouriApplication),
+                    connectivityObserver = AndroidConnectivityObserver(this@NouriApplication),
                 ),
             )
         }

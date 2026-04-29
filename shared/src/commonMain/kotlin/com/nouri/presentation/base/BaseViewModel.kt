@@ -2,6 +2,7 @@ package com.nouri.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nouri.domain.model.DomainError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,18 +21,18 @@ abstract class BaseViewModel<S : State, I : Intent, A : Action, E : Effect>(
     private val _uiEffect = Channel<E>(Channel.BUFFERED)
     val uiEffect: Flow<E> = _uiEffect.receiveAsFlow()
 
+    private val _error = Channel<DomainError>(Channel.BUFFERED)
+    val error: Flow<DomainError> = _error.receiveAsFlow()
+
     val currentState: S
         get() = _uiState.value
 
-    // Subclass maps intent to action by calling handleAction(...)
     abstract fun handleIntent(intent: I)
 
-    // Non-suspend bridge called from handleIntent; launches coroutine for processAction
     protected fun handleAction(action: A) {
         viewModelScope.launch { processAction(action) }
     }
 
-    // Suspend — subclass implements actual business logic here
     protected abstract suspend fun processAction(action: A)
 
     protected fun updateState(reducer: S.() -> S) {
@@ -43,6 +44,7 @@ abstract class BaseViewModel<S : State, I : Intent, A : Action, E : Effect>(
     }
 
     protected open fun handleError(throwable: Throwable) {
-        // NEU-68: global error handling strategy
+        val error = DomainError.from(throwable)
+        viewModelScope.launch { _error.send(error) }
     }
 }

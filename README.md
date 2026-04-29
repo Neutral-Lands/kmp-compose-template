@@ -412,6 +412,18 @@ supabase secrets set FCM_SERVER_KEY=your_fcm_server_key
 
 ---
 
+## Error Handling Strategy
+
+| Scenario | Pattern |
+|---|---|
+| Transient (network timeout) | Snackbar via `BaseViewModel.handleError()` → `error` flow → global snackbar |
+| Unrecoverable (auth expired) | `NouriErrorState` full-screen composable + retry button |
+| Silent (background sync fail) | Log only, retry queued |
+
+`BaseViewModel.handleError(throwable)` converts to a `DomainError` and emits on the `error` flow. The global `App` scaffold collects this and shows the appropriate snackbar or error state. Platform connectivity is observed via `ConnectivityObserver` — Android uses `ConnectivityManager`, iOS/Web are stubbed (NEU-136, NEU-84).
+
+---
+
 ## Key Docs
 
 | Document | Purpose |
