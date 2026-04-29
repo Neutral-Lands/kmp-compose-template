@@ -51,7 +51,7 @@ jobs:
         env:
           SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
         run: |
-          supabase storage cp -r \
+          supabase storage cp --experimental -r \
             shared/build/dist/wasmJs/productionExecutable/ \
             ss://nouri-web/
 
