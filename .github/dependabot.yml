@@ -1,0 +1,124 @@
+version: 2
+
+updates:
+  # ── Gradle wrapper ────────────────────────────────────────────────────────
+  - package-ecosystem: gradle
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/Lima
+    open-pull-requests-limit: 10
+    # Never auto-merge — every version bump must be reviewed and tested manually
+    # because Kotlin, CMP, and AGP upgrades often require source-set or API changes.
+    assignees:
+      - kaldarel
+    labels:
+      - dependencies
+
+    groups:
+      # Kotlin toolchain — Kotlin, AGP, and Compose compiler move in lockstep
+      kotlin-toolchain:
+        patterns:
+          - "org.jetbrains.kotlin*"
+          - "com.android.tools.build*"
+          - "org.jetbrains.kotlin.plugin*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Compose Multiplatform — CMP runtime, material3, lifecycle-viewmodel
+      compose-multiplatform:
+        patterns:
+          - "org.jetbrains.compose*"
+          - "androidx.lifecycle*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Supabase-kt — auth, postgrest, storage, realtime move together
+      supabase:
+        patterns:
+          - "io.github.jan-tennert.supabase*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Ktor — client engine updates shipped together
+      ktor:
+        patterns:
+          - "io.ktor*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Koin — DI framework
+      koin:
+        patterns:
+          - "io.insert-koin*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # SQLDelight — runtime + driver updates shipped together
+      sqldelight:
+        patterns:
+          - "app.cash.sqldelight*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Kotlinx libraries — coroutines, serialization
+      kotlinx:
+        patterns:
+          - "org.jetbrains.kotlinx*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Test utilities — turbine, mockk
+      test-libraries:
+        patterns:
+          - "app.cash.turbine*"
+          - "io.mockk*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Detekt + ktlint — static analysis tools
+      static-analysis:
+        patterns:
+          - "io.gitlab.arturbosch.detekt*"
+          - "org.jlleitschuh.gradle*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+      # Kover — coverage
+      kover:
+        patterns:
+          - "org.jetbrains.kotlinx.kover*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
+
+  # ── GitHub Actions ────────────────────────────────────────────────────────
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+      time: "09:00"
+      timezone: America/Lima
+    assignees:
+      - kaldarel
+    labels:
+      - dependencies
+    groups:
+      github-actions:
+        patterns:
+          - "*"
+        update-types:
+          - version-update:semver-minor
+          - version-update:semver-patch
