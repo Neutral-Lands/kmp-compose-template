@@ -280,16 +280,34 @@ insert into subscription_plans (id, name, max_patients, price_usd_cents) values
 
 ## Testing
 
-### Run unit tests
+### Tooling
+
+| Tool | Purpose |
+|---|---|
+| **Kotlin Test** | KMP-compatible test framework — works on Android, iOS, Web |
+| **Turbine** | Flow testing — `flow.test { awaitItem() }` |
+| **Kotlinx Coroutines Test** | `runTest`, `TestCoroutineDispatcher` |
+| **MockK** | Mocking — JVM/Android/Native only; use hand-written fakes in `commonTest` |
+| **Kover** | JVM code coverage — enforced in CI |
+
+### What to test
+
+- All use cases — every public function, happy path and error cases
+- All repository implementations — local reads/writes, sync flag logic
+- All domain calculators — pure functions, boundary values
+- All `BaseViewModel` state transitions — intent → action → state update
+- Sync logic — offline queue, conflict resolution
+
+### What NOT to test
+
+- Composable UI functions — no UI tests for MVP
+- Data classes and mappers with no logic
+- Supabase client calls — manually integration-tested
+
+### Run tests (Wasm target)
 
 ```bash
-./gradlew :shared:testDebugUnitTest
-```
-
-### Run all tests across all modules
-
-```bash
-./gradlew test
+./gradlew :shared:wasmJsBrowserTest
 ```
 
 ### Generate Kover coverage report
@@ -298,9 +316,21 @@ insert into subscription_plans (id, name, max_patients, price_usd_cents) values
 ./gradlew koverHtmlReport
 ```
 
-Report is generated at `shared/build/reports/kover/html/index.html`.
+Report at `build/reports/kover/html/index.html`.
 
-Coverage thresholds are enforced in CI — builds fail below the configured minimum.
+### Coverage thresholds (enforced in CI — NEU-18)
+
+| Layer | Minimum |
+|---|---|
+| `com.nouri.domain` | 80% line coverage |
+| `com.nouri.data` | 70% line coverage |
+| `com.nouri.presentation` | 70% line coverage |
+
+```bash
+./gradlew koverVerify   # fails if below thresholds
+```
+
+> **MockK note:** `io.mockk:mockk` supports JVM, Android, and Kotlin/Native only — not Wasm. Use hand-written fakes in `commonTest`. MockK is available for JVM-specific test source sets once CI (NEU-18) configures platform runners.
 
 ---
 

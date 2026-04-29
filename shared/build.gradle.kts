@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.detekt)
     alias(libs.plugins.sqldelight)
+    alias(libs.plugins.kover)
     kotlin("native.cocoapods")
 }
 
@@ -20,6 +21,8 @@ kotlin {
         compileSdk = 36
         minSdk = 26
     }
+
+    jvm() // JVM target so commonTest runs on JVM and Kover can measure coverage
 
     iosX64()
     iosArm64()
@@ -80,6 +83,9 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
             implementation(libs.sqldelight.driver.native)
+        }
+        jvmMain.dependencies {
+            implementation(libs.sqldelight.driver.jdbc)
         }
         wasmJsMain.dependencies {
             implementation(libs.ktor.client.js)
