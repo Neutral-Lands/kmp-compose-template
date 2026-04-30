@@ -1,5 +1,6 @@
-// Copy this file to Config.xcconfig (gitignored) and fill in values from 1Password.
+// Copy this file to Config.xcconfig (gitignored) and fill in values.
 // Config.xcconfig is never committed to version control.
+// Do NOT add #include lines here — Debug.xcconfig and Release.xcconfig chain them.
 
 SUPABASE_URL = https://your-project-ref.supabase.co
 SUPABASE_ANON_KEY = your-anon-key-here
