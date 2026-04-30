@@ -2,6 +2,8 @@ package com.nouri.presentation.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.nouri.analytics.CrashReporter
+import com.nouri.analytics.NoOpAnalytics
 import com.nouri.domain.model.DomainError
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
@@ -11,10 +13,15 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import org.koin.core.context.GlobalContext
 
 abstract class BaseViewModel<S : State, I : Intent, A : Action, E : Effect>(
     initialState: S,
 ) : ViewModel() {
+    // Lazy lookup — falls back to NoOp when Koin is not started (unit tests).
+    private val crashReporter: CrashReporter by lazy {
+        GlobalContext.getOrNull()?.getOrNull<CrashReporter>() ?: NoOpAnalytics
+    }
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<S> = _uiState.asStateFlow()
 
@@ -45,6 +52,7 @@ abstract class BaseViewModel<S : State, I : Intent, A : Action, E : Effect>(
 
     protected open fun handleError(throwable: Throwable) {
         val error = DomainError.from(throwable)
+        crashReporter.recordException(throwable)
         viewModelScope.launch { _error.send(error) }
     }
 }

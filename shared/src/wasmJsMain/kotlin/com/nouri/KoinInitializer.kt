@@ -1,5 +1,6 @@
 package com.nouri
 
+import com.nouri.analytics.NoOpAnalytics
 import com.nouri.data.connectivity.WasmConnectivityObserver
 import com.nouri.data.local.DatabaseDriverFactory
 import com.nouri.di.appModule
@@ -17,6 +18,8 @@ fun initKoin(
                 supabaseAnonKey = supabaseAnonKey,
                 driverFactory = DatabaseDriverFactory(),
                 connectivityObserver = WasmConnectivityObserver(),
+                analytics = NoOpAnalytics,
+                crashReporter = NoOpAnalytics,
             ),
         )
     }

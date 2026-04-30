@@ -479,6 +479,54 @@ Never commit `Config.xcconfig` — credentials live in **1Password → Nouri vau
 
 ---
 
+## Firebase Crashlytics & Analytics
+
+Crash reporting (Crashlytics) and event analytics (Firebase Analytics) are configured for Android and iOS. Analytics is **disabled in debug builds** — all events are no-ops when `BuildConfig.DEBUG = true`.
+
+### One-time setup
+
+1. Download `google-services.json` (Android) and `GoogleService-Info.plist` (iOS) from **1Password → Nouri vault**
+2. Place them at:
+   - `androidApp/google-services.json`
+   - `iosApp/iosApp/GoogleService-Info.plist`
+3. Both files are gitignored — never commit them
+
+### Analytics wrapper — `NouriAnalytics`
+
+All analytics calls go through `com.nouri.analytics.NouriAnalytics`. Never call Firebase directly from UI or ViewModel — inject `NouriAnalytics` via Koin:
+
+```kotlin
+class MyViewModel(private val analytics: NouriAnalytics) : BaseViewModel<...>(...) {
+    private fun onLogin() {
+        analytics.logLogin()
+    }
+}
+```
+
+### Tracked events
+
+| Event | Method | Parameters |
+|---|---|---|
+| Sign up | `logSignUp(role)` | `role`: nutritionist / patient |
+| Login | `logLogin()` | — |
+| Meal logged | `logMealLogged(slot, status)` | slot, status |
+| Plan downloaded | `logPlanDownloaded()` | — |
+| Appointment created | `logAppointmentCreated()` | — |
+| Appointment rescheduled | `logAppointmentRescheduled()` | — |
+| Appointment cancelled | `logAppointmentCancelled()` | — |
+| Measurement entered | `logMeasurementEntered()` | — |
+| Subscription plan viewed | `logSubscriptionPlanViewed(planName)` | plan name |
+
+### Crashlytics
+
+Non-fatal errors are automatically reported via `BaseViewModel.handleError()`. To attach the Supabase user ID to crash reports (call after sign-in — no PII):
+
+```kotlin
+crashReporter.setUserId(supabaseUserId)
+```
+
+---
+
 ## Push Notifications Setup
 
 Push notifications use FCM (Android) and APNs (iOS) via a Supabase Edge Function.

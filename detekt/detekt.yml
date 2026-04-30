@@ -6,9 +6,12 @@ complexity:
   active: true
   LongMethod:
     threshold: 60
+  LongParameterList:
+    functionThreshold: 7
   TooManyFunctions:
     thresholdInFiles: 20
     thresholdInClasses: 15
+    thresholdInObjects: 15
 
 coroutines:
   active: true

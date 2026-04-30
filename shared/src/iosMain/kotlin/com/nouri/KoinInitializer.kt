@@ -1,5 +1,6 @@
 package com.nouri
 
+import com.nouri.analytics.IosNouriAnalytics
 import com.nouri.data.connectivity.IosConnectivityObserver
 import com.nouri.data.local.DatabaseDriverFactory
 import com.nouri.di.appModule
@@ -16,6 +17,8 @@ fun initKoin(
                 supabaseAnonKey = supabaseAnonKey,
                 driverFactory = DatabaseDriverFactory(),
                 connectivityObserver = IosConnectivityObserver(),
+                analytics = IosNouriAnalytics,
+                crashReporter = IosNouriAnalytics,
             ),
         )
     }

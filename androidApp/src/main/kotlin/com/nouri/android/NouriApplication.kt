@@ -2,6 +2,7 @@ package com.nouri.android
 
 import android.app.Application
 import android.util.Log
+import com.nouri.android.analytics.FirebaseNouriAnalytics
 import com.nouri.data.connectivity.AndroidConnectivityObserver
 import com.nouri.data.datasource.remote.SubscriptionPlanDataSource
 import com.nouri.data.local.DatabaseDriverFactory
@@ -16,6 +17,7 @@ import org.koin.java.KoinJavaComponent.get
 class NouriApplication : Application() {
     override fun onCreate() {
         super.onCreate()
+        val firebase = FirebaseNouriAnalytics(this, BuildConfig.DEBUG)
         startKoin {
             androidContext(this@NouriApplication)
             modules(
@@ -24,6 +26,8 @@ class NouriApplication : Application() {
                     supabaseAnonKey = BuildConfig.SUPABASE_ANON_KEY,
                     driverFactory = DatabaseDriverFactory(this@NouriApplication),
                     connectivityObserver = AndroidConnectivityObserver(this@NouriApplication),
+                    analytics = firebase,
+                    crashReporter = firebase,
                 ),
             )
         }
