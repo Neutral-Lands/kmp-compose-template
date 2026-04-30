@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import org.koin.core.context.GlobalContext
+import org.koin.mp.KoinPlatformTools
 
 abstract class BaseViewModel<S : State, I : Intent, A : Action, E : Effect>(
     initialState: S,
 ) : ViewModel() {
     // Lazy lookup — falls back to NoOp when Koin is not started (unit tests).
     private val crashReporter: CrashReporter by lazy {
-        GlobalContext.getOrNull()?.getOrNull<CrashReporter>() ?: NoOpAnalytics
+        KoinPlatformTools.defaultContext().getOrNull()?.getOrNull<CrashReporter>() ?: NoOpAnalytics
     }
     private val _uiState = MutableStateFlow(initialState)
     val uiState: StateFlow<S> = _uiState.asStateFlow()
