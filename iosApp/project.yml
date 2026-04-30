@@ -1,6 +1,6 @@
 name: iosApp
 options:
-  bundleIdPrefix: com.nouri
+  bundleIdPrefix: com.yourcompany
   deploymentTarget:
     iOS: "14.0"
   xcodeVersion: "16"
@@ -13,9 +13,11 @@ targets:
     deploymentTarget: "14.0"
     sources:
       - path: iosApp
+    dependencies:
+      - sdk: libsqlite3.tbd
     configFiles:
-      Debug: Configuration/Config.xcconfig
-      Release: Configuration/Config.xcconfig
+      Debug: Configuration/Debug.xcconfig
+      Release: Configuration/Release.xcconfig
     info:
       path: iosApp/Info.plist
       properties:
@@ -33,7 +35,7 @@ targets:
           - UIInterfaceOrientationLandscapeRight
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.nouri.ios
+        PRODUCT_BUNDLE_IDENTIFIER: com.yourcompany.ios
         SWIFT_VERSION: 5.0
         MARKETING_VERSION: 0.1.0
         CURRENT_PROJECT_VERSION: 1
