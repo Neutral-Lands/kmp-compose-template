@@ -527,7 +527,7 @@ Deployment is **manual** — trigger via **GitHub → Actions → Deploy Web →
 ### Deployment URL
 
 ```
-https://nouri-web.pages.dev
+https://nouri-web.pages.dev (latest: https://f2bbdd40.nouri-web.pages.dev)
 ```
 
 *(Exact URL assigned by Cloudflare after the first deploy.)*
@@ -577,6 +577,6 @@ npx wrangler pages deploy shared/build/dist/wasmJs/productionExecutable --projec
 |---|---|
 | Linear — Diet Companion project | https://linear.app/neutral-lands |
 | Supabase dashboard — nouri-prod | https://supabase.com/dashboard/project/zpkhhpkpqfqodezguftf |
-| Web app (prod) | https://nouri-web.pages.dev |
+| Web app (prod) | https://nouri-web.pages.dev (latest: https://f2bbdd40.nouri-web.pages.dev) |
 | Firebase Console | https://console.firebase.google.com |
 | 1Password — Nouri vault | Ask a team member for access |
