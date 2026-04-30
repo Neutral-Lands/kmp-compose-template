@@ -518,21 +518,28 @@ supabase secrets set FCM_SERVER_KEY=your_fcm_server_key
 
 ---
 
-## Web Hosting (Supabase Storage)
+## Web Hosting (Cloudflare Pages)
 
-The Wasm build is deployed to a public Supabase Storage bucket (`nouri-web`) on every push to `main`. HTTPS is enforced by Supabase's CDN.
+The Wasm build is deployed to Cloudflare Pages. Cloudflare automatically serves all static assets with correct MIME types (including `application/wasm`) and enforces HTTPS globally.
+
+Deployment is **manual** — trigger via **GitHub → Actions → Deploy Web → Run workflow**.
 
 ### Deployment URL
 
 ```
-https://zpkhhpkpqfqodezguftf.supabase.co/storage/v1/object/public/nouri-web/index.html
+https://nouri-web.pages.dev
 ```
 
-### One-time bucket setup (Supabase dashboard)
+*(Exact URL assigned by Cloudflare after the first deploy.)*
 
-1. Open [Supabase dashboard → Storage](https://supabase.com/dashboard/project/zpkhhpkpqfqodezguftf/storage/buckets)
-2. Create a new bucket named **`nouri-web`** — tick **Public bucket** and enable **CDN**
-3. No additional RLS policies needed for a public read bucket
+### One-time setup
+
+1. Create a [Cloudflare account](https://dash.cloudflare.com/sign-up) if you don't have one
+2. In the Cloudflare dashboard → **Workers & Pages → Create → Pages → Connect to Git** — OR create the project via CLI:
+   ```bash
+   npx wrangler pages project create nouri-web
+   ```
+3. Note your **Account ID** from the Cloudflare dashboard sidebar
 
 ### CI secrets required
 
@@ -540,27 +547,17 @@ Add to **GitHub → Settings → Secrets → Actions**:
 
 | Secret | Value |
 |---|---|
-| `SUPABASE_ACCESS_TOKEN` | Personal access token from [supabase.com/account/tokens](https://supabase.com/account/tokens) |
+| `CLOUDFLARE_API_TOKEN` | API token from [dash.cloudflare.com/profile/api-tokens](https://dash.cloudflare.com/profile/api-tokens) — use the **Edit Cloudflare Workers** template (includes Pages) |
+| `CLOUDFLARE_ACCOUNT_ID` | Account ID from Cloudflare dashboard sidebar |
 | `SUPABASE_URL` | `https://zpkhhpkpqfqodezguftf.supabase.co` |
 | `SUPABASE_ANON_KEY` | Anon key from 1Password → Nouri vault |
 
-### Manual deploy
+### Manual local deploy
 
 ```bash
-# Build
 source .env.local && ./gradlew :shared:wasmJsBrowserDistribution
-
-# Upload (requires SUPABASE_ACCESS_TOKEN in env)
-supabase storage cp \
-  --project-ref zpkhhpkpqfqodezguftf \
-  --recursive \
-  shared/build/dist/wasmJs/productionExecutable/ \
-  ss://nouri-web/
+npx wrangler pages deploy shared/build/dist/wasmJs/productionExecutable --project-name nouri-web
 ```
-
-### SPA routing note
-
-Navigation is currently state-based (no URL routing), so refreshing the browser always loads `index.html` → Dashboard with no 404. URL-based deep linking will require a Supabase Edge Function proxy when added.
 
 ---
 
@@ -580,6 +577,6 @@ Navigation is currently state-based (no URL routing), so refreshing the browser 
 |---|---|
 | Linear — Diet Companion project | https://linear.app/neutral-lands |
 | Supabase dashboard — nouri-prod | https://supabase.com/dashboard/project/zpkhhpkpqfqodezguftf |
-| Web app (prod) | https://zpkhhpkpqfqodezguftf.supabase.co/storage/v1/object/public/nouri-web/index.html |
+| Web app (prod) | https://nouri-web.pages.dev |
 | Firebase Console | https://console.firebase.google.com |
 | 1Password — Nouri vault | Ask a team member for access |
