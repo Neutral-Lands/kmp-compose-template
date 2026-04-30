@@ -19,7 +19,7 @@ kotlin {
         freeCompilerArgs.add("-Xexpect-actual-classes")
     }
     android {
-        namespace = "com.nouri.shared"
+        namespace = "com.neutrallands.nouri.shared"
         compileSdk = 36
         minSdk = 26
     }
@@ -121,8 +121,8 @@ kover {
         filters {
             excludes {
                 classes(
-                    "com.nouri.presentation.shared.*",
-                    "com.nouri.data.connectivity.*",
+                    "com.neutrallands.nouri.presentation.shared.*",
+                    "com.neutrallands.nouri.data.connectivity.*",
                     "nouri.shared.generated.resources.*",
                 )
             }
@@ -142,7 +142,7 @@ kover {
 sqldelight {
     databases {
         create("NouriDatabase") {
-            packageName.set("com.nouri.data.local")
+            packageName.set("com.neutrallands.nouri.data.local")
             schemaOutputDirectory.set(file("src/commonMain/sqldelight/schema"))
             verifyMigrations.set(true)
         }

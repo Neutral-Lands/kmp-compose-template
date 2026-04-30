@@ -38,8 +38,8 @@ dependencies {
 //   data.connectivity    — platform stubs (Android/iOS/Wasm), not in jvmTest classpath
 //   generated.resources  — SQLDelight / Compose codegen
 val koverExcludedClasses = listOf(
-    "com.nouri.presentation.shared.*",
-    "com.nouri.data.connectivity.*",
+    "com.neutrallands.nouri.presentation.shared.*",
+    "com.neutrallands.nouri.data.connectivity.*",
     "nouri.shared.generated.resources.*",
 )
 

@@ -19,11 +19,11 @@ val localProps =
     }
 
 android {
-    namespace = "com.nouri.android"
+    namespace = "com.neutrallands.nouri.android"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.nouri"
+        applicationId = "com.neutrallands.nouri"
         minSdk = 26
         targetSdk = 36
         versionCode = 1
